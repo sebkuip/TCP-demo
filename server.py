@@ -1,13 +1,8 @@
 import socket
 import threading
 
-running = False
-serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-serversocket.bind(('', 12345))
-serversocket.listen(5)
-
 def listen():
-    while running:
+    while True:
         socket, address = serversocket.accept()
         client = ServerConnection(socket, address)
         client.start_listening()
@@ -24,7 +19,7 @@ class ServerConnection():
         self.client.send(message.encode())
 
     def receive(self):
-        if not self.connected:
+        if self.connected:
             return self.client.recv(1024).decode()
         else:
             raise ConnectionError("Client is not connected")
@@ -50,6 +45,9 @@ class ServerConnection():
         self.listen_thread.start()
 
 if __name__ == "__main__":
+    serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    serversocket.bind(('', 12345))
+    serversocket.listen(5)
     print("starting server")
-    running = True
     listen()
+    
