@@ -9,25 +9,25 @@ def listen():
         print(f"new connection from {address}")
 
 class ServerConnection():
-    def __init__(self, client, address):
-        self.client: socket.socket = client
+    def __init__(self, sock, address):
+        self.socket: socket.socket = sock
         self.address = address
         self.connected = False
         self.listen_thread = threading.Thread(target=self.loop)
 
     def send(self, message):
-        self.client.send(message.encode())
+        self.socket.send(message.encode())
 
     def receive(self):
         if self.connected:
-            return self.client.recv(1024).decode()
+            return self.socket.recv(1024).decode()
         else:
             raise ConnectionError("Client is not connected")
 
     def close(self):
         print(f"closing connection {self.address}")
         self.connected = False
-        self.client.close()
+        self.socket.close()
 
     def loop(self):
         while self.connected:
@@ -50,4 +50,3 @@ if __name__ == "__main__":
     serversocket.listen(5)
     print("starting server")
     listen()
-    
