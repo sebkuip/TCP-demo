@@ -19,7 +19,7 @@ class TCPPacket:
         return binary_data
 
 
-    def to_bytes(self) -> bytes:
+    def to_bytes(self) -> int:
         packet = 0
         packet |= (self.seqn & 0xFFFFFFFF) << 32
         packet |= (self.ackn & 0xFFFFFFFF) << 32
